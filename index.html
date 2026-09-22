@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="mr" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>आत्मनिरीक्षण.. ‘तुमचं बरं आहे’ पासून ‘आपल बरं आहे’ पर्यंत..</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Devanagari:wght@300;400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"IBM Plex Sans Devanagari"', '"IBM Plex Sans"', 'sans-serif'],
+          },
+          colors: {
+            surface: {
+              light: '#fbfbfa',
+              dark: '#121316',
+            },
+            card: {
+              light: '#ffffff',
+              dark: '#1c1d22',
+            },
+            textMain: {
+              light: '#1e2229',
+              dark: '#e2e5eb',
+            },
+            accent: {
+              amber: '#d97706',
+              warm: '#f59e0b',
+              emerald: '#10b981',
+              violet: '#8b5cf6'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Global font & typography settings */
+    body {
+      font-family: 'IBM Plex Sans Devanagari', 'IBM Plex Sans', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Justified text rules preserving Marathi conjuncts and preventing word breaks */
+    .marathi-content {
+      text-align: justify;
+      text-justify: inter-word;
+      word-break: keep-all;
+      hyphens: none;
+      overflow-wrap: break-word;
+    }
+
+    /* Smooth SVG ambient animations */
+    @keyframes floatGentle {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-7px) rotate(1.2deg); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 0.95; transform: scale(1.05); }
+    }
+
+    @keyframes shimmerOrbit {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes leafBreeze {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-4deg); }
+    }
+
+    .anim-float {
+      animation: floatGentle 6s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    .anim-glow {
+      animation: pulseGlow 4s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    .anim-spin-slow {
+      animation: shimmerOrbit 35s linear infinite;
+      transform-origin: 300px 170px;
+    }
+
+    .anim-breeze {
+      animation: leafBreeze 5s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+
+    /* Custom Toast transition */
+    #toast {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+  </style>
+</head>
+<body class="bg-surface-light dark:bg-surface-dark text-textMain-light dark:text-textMain-dark min-h-screen selection:bg-amber-200 dark:selection:bg-amber-900/60">
+
+  <header class="sticky top-0 z-40 backdrop-blur-md bg-surface-light/85 dark:bg-surface-dark/85 border-b border-stone-200/60 dark:border-stone-800/80 transition-colors duration-300">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-end space-x-2">
+      <!-- Theme Toggle Button -->
+      <button id="themeToggleBtn" aria-label="Toggle theme" class="p-2.5 rounded-full text-stone-600 dark:text-stone-300 hover:bg-stone-200/70 dark:hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all">
+        <!-- Sun icon (shown in dark mode) -->
+        <svg id="sunIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <!-- Moon icon (shown in light mode) -->
+        <svg id="moonIcon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+
+      <!-- Share Button -->
+      <button id="shareBtn" aria-label="Share article" class="p-2.5 rounded-full text-stone-600 dark:text-stone-300 hover:bg-stone-200/70 dark:hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <circle cx="18" cy="5" r="3"></circle>
+          <circle cx="6" cy="12" r="3"></circle>
+          <circle cx="18" cy="19" r="3"></circle>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 sm:px-8 py-8 sm:py-12">
+
+    <!-- Light, colorful, thoughtful animated SVG illustrating Introspection, Gratitude & JOMO -->
+    <div class="mb-10 w-full flex justify-center">
+      <div class="w-full max-w-lg rounded-2xl p-2 bg-gradient-to-b from-amber-50/60 to-rose-50/40 dark:from-stone-900/60 dark:to-stone-900/30 border border-stone-200/60 dark:border-stone-800 shadow-sm overflow-hidden">
+        <svg viewBox="0 0 600 340" class="w-full h-auto drop-shadow-sm select-none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#fef3c7" stop-opacity="0.8"/>
+              <stop offset="50%" stop-color="#fed7aa" stop-opacity="0.5"/>
+              <stop offset="100%" stop-color="#fbcfe8" stop-opacity="0.3"/>
+            </linearGradient>
+
+            <linearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fbbf24"/>
+              <stop offset="100%" stop-color="#f97316"/>
+            </linearGradient>
+
+            <linearGradient id="lotusGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#f43f5e"/>
+              <stop offset="100%" stop-color="#ec4899"/>
+            </linearGradient>
+
+            <radialGradient id="haloGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.5"/>
+              <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+            </radialGradient>
+
+            <filter id="softGlow">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+
+          <!-- Background rounded canvas -->
+          <rect width="600" height="340" rx="16" fill="url(#skyGrad)"/>
+
+          <!-- Gentle Horizon and Hills representing calmness and peace -->
+          <path d="M0,280 Q150,220 300,260 T600,250 L600,340 L0,340 Z" fill="#bbf7d0" fill-opacity="0.4"/>
+          <path d="M0,295 Q200,250 400,285 T600,275 L600,340 L0,340 Z" fill="#86efac" fill-opacity="0.4"/>
+
+          <!-- Introspection Sun & Radiant Halo (Clarity & Awareness) -->
+          <g class="anim-glow">
+            <circle cx="300" cy="130" r="75" fill="url(#haloGlow)"/>
+            <circle cx="300" cy="130" r="38" fill="url(#sunGrad)"/>
+          </g>
+
+          <!-- Gentle Orbit Ring around the Sun (Drone Perspective / तटस्थ नजर) -->
+          <g class="anim-spin-slow">
+            <circle cx="300" cy="130" r="88" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6,8" opacity="0.6"/>
+            <!-- Perspective Drone / Beacon node representing Drone Vision -->
+            <circle cx="388" cy="130" r="5" fill="#0284c7" />
+            <circle cx="212" cy="130" r="4" fill="#10b981" />
+          </g>
+
+          <!-- Floating Gratitude particles / Sparkles -->
+          <g class="anim-float">
+            <!-- Warm sparkles -->
+            <path d="M190,85 Q190,95 200,95 Q190,95 190,105 Q190,95 180,95 Q190,95 190,85 Z" fill="#fbbf24"/>
+            <path d="M410,75 Q410,83 418,83 Q410,83 410,91 Q410,83 402,83 Q410,83 410,75 Z" fill="#f59e0b"/>
+            <path d="M140,150 Q140,156 146,156 Q140,156 140,162 Q140,156 134,156 Q140,156 140,150 Z" fill="#38bdf8"/>
+            <path d="M465,140 Q465,147 472,147 Q465,147 465,154 Q465,147 458,147 Q465,147 465,140 Z" fill="#ec4899"/>
+          </g>
+
+          <!-- Calm Meditative Lotus Base (Inner Contentment & Peace / जोमो) -->
+          <g transform="translate(300, 268)" class="anim-breeze">
+            <!-- Water Lily Pads -->
+            <ellipse cx="0" cy="22" rx="90" ry="14" fill="#059669" fill-opacity="0.25"/>
+            <ellipse cx="-45" cy="18" rx="42" ry="8" fill="#10b981" fill-opacity="0.4"/>
+            <ellipse cx="45" cy="18" rx="42" ry="8" fill="#10b981" fill-opacity="0.4"/>
+
+            <!-- Outer Lotus Petals -->
+            <path d="M-55,10 C-60,-15 -25,-35 0,0 C25,-35 60,-15 55,10 Z" fill="#fda4af" opacity="0.8"/>
+            <path d="M-40,8 C-45,-25 -10,-48 0,-5 C10,-48 45,-25 40,8 Z" fill="#fb7185" opacity="0.9"/>
+            
+            <!-- Central Lotus Petals -->
+            <path d="M-22,6 C-24,-30 0,-55 0,-5 C0,-55 24,-30 22,6 Z" fill="url(#lotusGrad)"/>
+            <path d="M-10,5 C-12,-20 0,-40 0,-2 C0,-40 12,-20 10,5 Z" fill="#fecdd3"/>
+
+            <!-- Golden Heart of Gratitude / Inner Peace -->
+            <circle cx="0" cy="-6" r="6.5" fill="#f59e0b" filter="url(#softGlow)"/>
+          </g>
+
+          <!-- Symbolic Balanced Wings (Clarity & Gratitude) -->
+          <g fill="none" stroke="#0284c7" stroke-width="1.8" stroke-linecap="round" opacity="0.75" class="anim-float">
+            <!-- Stylized birds soaring freely in the open sky -->
+            <path d="M220,110 Q230,100 240,110 Q250,100 260,110" />
+            <path d="M340,95 Q348,87 356,95 Q364,87 372,95" />
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <article class="space-y-6 sm:space-y-7 leading-relaxed sm:leading-loose text-base sm:text-lg text-stone-800 dark:text-stone-200">
+      
+      <!-- Primary Heading & Subtitle as strictly provided in document -->
+      <div class="space-y-2 mb-8 text-center sm:text-left">
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-stone-900 dark:text-white leading-tight">
+          आत्मनिरीक्षण..
+        </h1>
+        <p class="text-lg sm:text-xl md:text-2xl font-semibold text-amber-700 dark:text-amber-400">
+          ‘तुमचं बरं आहे’ पासून ‘आपल बरं आहे’ पर्यंत..
+        </p>
+      </div>
+
+      <!-- Exact Marathi Text Paragraphs with Guaranteed Word Integrity & Full Justification -->
+      <p class="marathi-content">
+        रोजच्या जीवनात इतरांशी संवाद होत असताना बऱ्याच वेळा आपल्या कानावर ‘तुमचं बरं आहे’ हे वाक्य पडत असते. (पुण्यात बरेच वेळेस त्याच्या आधी एक ‘च्या..’ देखील असतो! असो!). अनेकदा आपण देखील कोणालातरी उत्तरादाखल हेच वाक्य ऐकवत असतो; अगदी ठळक ‘च्या’ लावून..
+      </p>
+
+      <p class="marathi-content">
+        का बर असत असं? म्हणजे बहुतेकदा आपल्यापेक्षा इतरांच(च) बरं आहे असं का वाटत असत?
+      </p>
+
+      <p class="marathi-content">
+        हे सगळं येत ते आपल्या सतत तुलना करण्याच्या, हे हवे, ते हवे असे वाटत राहण्याच्या मनोवृत्तीतून. आपल्याकडे जे आहे त्यात आपले समाधान होतच नाही. खरे तर आपल्याकडे जे आहे त्याची आपल्याला जाणीवच नसते आणि म्हणून मग दुसऱ्याकडे आपल्या पेक्षा काहीही वेगळे दिसले की आपल्याला ते हवहवेसे वाटते; एक असुरक्षिततेची भावना निर्माण होते आणि त्यातून ‘आपण सोडून इतरांच बरं आहे’ चा जन्म होतो. आपण सारखं काहीतरी गमावतो आहोत असे वाटू लागते. Fear of missing out - FOMO. हा ‘फोमो’ आपलीच खूप ऊर्जा खात असतो याची देखील आपल्याला जाणीव नसते.
+      </p>
+
+      <p class="marathi-content">
+        पुण्यात उन्हाचा दाह वाढला की तिकडे काश्मीर मधे छान ठंडा ठंडा कूल कूल ‘बरं आहे’ असे आपल्याला वाटू लागते. या वेळी आपल्या मनात काश्मीर मधील रोजच्या असुरक्षित परिस्थितीचा विचार देखील येत नाही. इतकेच नाही तर आपल्याच राज्यात मराठवाडा, विदर्भ या भागात आणि देशात ओडीशा, झारखंड या राज्यात जास्त गंभीर उष्णतेची लाट आहे याची देखील आपल्याला जाणीव नसते. इतका उन्हाळा असून आपल्याकडे इतरत्र आहे तशी पाण्याची टंचाई नाहीये हे तर आपल्या खिजगणतीत देखील नसते.
+      </p>
+
+      <p class="marathi-content">
+        हे झालं आपल्या देशातील तुलनात्मक बर असणं आणि नसणं. त्याखेरीज आपले एकंदर जीवन किती असुरक्षित आहे, free and fair कसे नाहीये याची अहमहमिकेने चर्चा करताना आपल्याला जर अफगाणिस्तान, सोमालिया, मध्य आफ्रिका, हैती, युद्धग्रस्त युक्रेन मधील लोकांनी ऐकले तर ते सर्व जण आपली प्रत्यक्षातील स्थिती पाहून आपल्याला ‘तुमचं बरं आहे’ हे इतक्या जोराने ऐकवतील की आपले कान फुटायची वेळ येईल.
+      </p>
+
+      <p class="marathi-content">
+        हे जे इतरांच ‘बरं असणं’ असत ना ते प्रत्यक्षात तसं नसतच. प्रत्येकाच्या जीवनात काही ना काही उणे-अधिक असतेच असते. विधात्याने आपल्या भाग्यात जे दिले आहे त्याबद्दल आपण कृतज्ञ नसतो, म्हणून असे होत असते. हा दोष मूळचा नसतो. आपल्याला कृतज्ञतेची जाणीव असायला हवी हे ठाऊक नसते म्हणून हे घडते.
+      </p>
+
+      <p class="marathi-content">
+        मानसिक स्वास्थ्याच्या प्रवासात समाधानाच्या अमृतकाळाकडे कूच करत असताना एकदा का introspection अर्थात आत्मनिरीक्षण करण्याची क्लुप्ती कळली की त्याचा एक परिणाम म्हणून या ‘फोमो’वर मात करणे जरा जरा जमू लागते. दिवसाकाठी काही क्षण का असेना पण त्रयस्थ आणि तटस्थ नजरेने, drone vision ने आपल्यालाच आपल्याकडे पाहाता येऊ लागले की आपल्याकडे आहे ते खरोखरच विपुल आहे हे दिसू लागते. एका समाधानी आयुष्यासाठी नक्की किती गोष्टींची खरंच गरज असते आणि प्रत्यक्षात ‘आपले बरे असावे’ म्हणून आपण किती अनावश्यक संग्रह करत असतो याची जाणीव होऊ लागते. आपण आपले जीवन materialistic बाबीत किती गुरफटवून ठेवले आहे हे कळू लागते. जगातील कितीतरी लोकांना आपल्याकडे जे काही आहे त्याच्या एक दशांश देखील मिळू शकत नाहीये हे जाणवू लागते. हीच कृतज्ञतेची अनुभूती असते.
+      </p>
+
+      <p class="marathi-content">
+        मग ‘फोमो’ची जागा ‘जोमो’ अर्थात joy of missing out घेऊ लागतो. जगातील अनेक कमनशिबी जीवांच्या आयुष्यातील, त्यांनी जाणीवपूर्वक न ओढवून घेतलेले आणि त्यांना न टाळता येणारे ‘दुर्दैव’ आपल्या वाटयास कांकणभरही येत नाही, we gratefully miss out ‘that suffering’ हे कळते. हा ‘जोमो’चा म्हणजे ‘आपले बरे आहे’ हे आपले आपल्यालाच समजण्याचा, सांगण्याचा आणि कळण्याचा आनंद शब्दातीत असतो. शिवाय हा ‘जोमो’ आपल्याला joy म्हणजे आनंद देतो हा फायदा वेगळाच.
+      </p>
+
+      <p class="marathi-content">
+        ‘कृतज्ञता’ - Gratitude हा शब्द लिहायला, उच्चारायला थोडा जड आहे खरा परंतु त्याचा अर्थ समजणे, समजून घेणे आणि शक्य तितका आचरणात आणणे मनःस्वास्थ्यासाठी खरंच आवश्यक आहे. आल्हाददायक आहे.
+      </p>
+
+      <p class="marathi-content font-medium text-amber-900 dark:text-amber-300">
+        केल्याने होत आहे रे, थोडेसे ‘आत्मनिरीक्षण’ केलेची पाहिजे.
+      </p>
+
+      <div class="text-center pt-4 tracking-widest text-stone-400 dark:text-stone-600 text-lg select-none">
+        ⧫⧫⧫
+      </div>
+
+    </article>
+  </main>
+
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 text-sm font-medium px-4 py-2.5 rounded-full shadow-lg opacity-0 pointer-events-none translate-y-2 z-50">
+    Link copied!
+  </div>
+
+  <script>
+    // Theme Switcher Logic
+    const htmlElement = document.documentElement;
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const sunIcon = document.getElementById('sunIcon');
+    const moonIcon = document.getElementById('moonIcon');
+
+    // Initialize theme based on preference or system
+    const userPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const storedTheme = localStorage.getItem('theme');
+
+    if (storedTheme === 'dark' || (!storedTheme && userPrefersDark)) {
+      htmlElement.classList.add('dark');
+      sunIcon.classList.remove('hidden');
+      moonIcon.classList.add('hidden');
+    } else {
+      htmlElement.classList.remove('dark');
+      sunIcon.classList.add('hidden');
+      moonIcon.classList.remove('hidden');
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+      if (htmlElement.classList.contains('dark')) {
+        htmlElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+      } else {
+        htmlElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+      }
+    });
+
+    // Share Button Logic
+    const shareBtn = document.getElementById('shareBtn');
+    const toast = document.getElementById('toast');
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.remove('opacity-0', 'translate-y-2', 'pointer-events-none');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'translate-y-2', 'pointer-events-none');
+      }, 2500);
+    }
+
+    shareBtn.addEventListener('click', async () => {
+      const shareData = {
+        title: 'आत्मनिरीक्षण.. ‘तुमचं बरं आहे’ पासून ‘आपल बरं आहे’ पर्यंत..',
+        text: 'आत्मनिरीक्षण.. ‘तुमचं बरं आहे’ पासून ‘आपल बरं आहे’ पर्यंत..',
+        url: window.location.href
+      };
+
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+        } catch (err) {
+          // If user cancels or shares fails, ignore
+        }
+      } else {
+        // Fallback: Copy URL to clipboard
+        try {
+          const tempInput = document.createElement('input');
+          tempInput.value = window.location.href;
+          document.body.appendChild(tempInput);
+          tempInput.select();
+          document.execCommand('copy');
+          document.body.removeChild(tempInput);
+          showToast('Link copied to clipboard!');
+        } catch (copyErr) {
+          showToast(window.location.href);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
